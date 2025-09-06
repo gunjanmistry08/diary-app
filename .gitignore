@@ -1,0 +1,30 @@
+# Go build
+/bin/
+*.exe
+*.dll
+*.so
+*.dylib
+*.test
+
+# Output of the go coverage tool
+*.out
+
+# Dependency directories
+vendor/
+
+# IDE/editor files
+.vscode/
+.idea/
+
+# Database files
+*.db
+
+# Configs
+configs/database.json
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
