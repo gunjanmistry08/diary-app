@@ -2,9 +2,15 @@ name: Go CI
 
 on:
   push:
+<<<<<<< HEAD
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+=======
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+>>>>>>> master
 
 jobs:
   build:
