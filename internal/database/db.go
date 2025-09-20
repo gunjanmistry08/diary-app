@@ -85,7 +85,7 @@ func Connect() {
 
 	log.Println("Connected to database!")
 
-	db.AutoMigrate(&models.User{}, &models.DiaryEntry{})
+	db.AutoMigrate(&models.User{}, &models.DiaryEntry{}, &models.Habit{})
 
 	DB = db
 }
