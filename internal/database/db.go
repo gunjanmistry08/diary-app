@@ -85,9 +85,9 @@ func Connect() {
 
 	log.Println("Connected to database!")
 
-	db.AutoMigrate(&models.User{}, &models.DiaryEntry{}, &models.Habit{})
+	db.AutoMigrate(&models.User{}, &models.DiaryEntry{}, &models.Habit{}, &models.HabitStrategy{}, &models.HabitNumberOfDaysPerPeriod{}, &models.HabitDaysOftheWeek{})
+
+	models.SeedHabitStrategies(db)
 
 	DB = db
 }
-
-// getEnv removed; config values are now loaded from config.json

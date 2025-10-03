@@ -9,25 +9,46 @@ import (
 type HabitStrategyString string
 
 const (
-	FrequencyDaily                 HabitStrategyString = "daily"
-	FrequencyRepeating             HabitStrategyString = "repeating"
-	FrequencyNumberOfDaysPerPeriod HabitStrategyString = "number_of_days_per_period"
-	FrequencySomeDaysOfTheWeek     HabitStrategyString = "some_days_of_the_week"
+	FrequencyDaily                 HabitStrategyString = "DAILY"
+	FrequencyRepeating             HabitStrategyString = "REPEATING"
+	FrequencyNumberOfDaysPerPeriod HabitStrategyString = "NUMBER_OF_DAYS_PER_PERIOD"
+	FrequencySomeDaysOfTheWeek     HabitStrategyString = "SOME_DAYS_OF_THE_WEEK"
 )
+
+type HabitNumberOfDaysPerPeriod struct {
+	gorm.Model
+	HabitID uint  `json:"habit_id"`
+	Habit   Habit `gorm:"foreignKey:HabitID" json:"-"`
+	Number  uint  `json:"number"`
+	Period  uint  `json:"period"` // in days
+}
+
+type HabitDaysOftheWeek struct {
+	gorm.Model
+	HabitID   uint  `json:"habit_id"`
+	Habit     Habit `gorm:"foreignKey:HabitID" json:"-"`
+	Monday    bool  `json:"monday"`
+	Tuesday   bool  `json:"tuesday"`
+	Wednesday bool  `json:"wednesday"`
+	Thursday  bool  `json:"thursday"`
+	Friday    bool  `json:"friday"`
+	Saturday  bool  `json:"saturday"`
+	Sunday    bool  `json:"sunday"`
+}
 
 type HabitType string
 
 const (
-	Counting HabitType = "counting"
-	Boolean  HabitType = "boolean"
+	Counting HabitType = "COUNTING"
+	Boolean  HabitType = "BOOLEAN"
 )
 
 type HabitStrategy struct {
 	gorm.Model
-	Strategy  string    `json:"strategy"`
-	Frequency string    `json:"frequency"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	Strategy  string              `json:"strategy"`
+	Frequency HabitStrategyString `json:"frequency"`
+	CreatedAt time.Time           `json:"created_at"`
+	UpdatedAt time.Time           `json:"updated_at"`
 }
 
 type Habit struct {
@@ -53,4 +74,40 @@ type HabitEntry struct {
 	UserID    uint      `json:"user_id"`
 	User      User      `gorm:"foreignKey:UserID" json:"-"`
 	CreatedAt time.Time `json:"created_at"`
+}
+
+func SeedHabitStrategies(db *gorm.DB) error {
+	strategies := []HabitStrategy{
+		{
+			Strategy:  "Daily",
+			Frequency: FrequencyDaily,
+			CreatedAt: time.Now(),
+			UpdatedAt: time.Now(),
+		},
+		{
+			Strategy:  "Repeating",
+			Frequency: FrequencyRepeating,
+			CreatedAt: time.Now(),
+			UpdatedAt: time.Now(),
+		},
+		{
+			Strategy:  "Number of Days Per Period",
+			Frequency: FrequencyNumberOfDaysPerPeriod,
+			CreatedAt: time.Now(),
+			UpdatedAt: time.Now(),
+		},
+		{
+			Strategy:  "Some Days of the Week",
+			Frequency: FrequencySomeDaysOfTheWeek,
+			CreatedAt: time.Now(),
+			UpdatedAt: time.Now(),
+		},
+	}
+
+	for _, s := range strategies {
+		if err := db.Create(&s).Error; err != nil {
+			return err
+		}
+	}
+	return nil
 }
