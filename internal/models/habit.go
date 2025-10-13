@@ -15,6 +15,13 @@ const (
 	FrequencySomeDaysOfTheWeek     HabitStrategyString = "SOME_DAYS_OF_THE_WEEK"
 )
 
+type HabitRepeating struct {
+	gorm.Model
+	HabitID  uint  `json:"habit_id"`
+	Habit    Habit `gorm:"foreignKey:HabitID" json:"-"`
+	Interval uint  `json:"interval"` // in days
+}
+
 type HabitNumberOfDaysPerPeriod struct {
 	gorm.Model
 	HabitID uint  `json:"habit_id"`

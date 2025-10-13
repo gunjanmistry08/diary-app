@@ -119,6 +119,31 @@ func CreateHabit(userID, habitStrategyID, numberofDays, period uint, title, desc
 		}
 	}
 
+	if strategy.Frequency == models.FrequencyRepeating {
+		if numberofDays == 0 {
+			tx.Rollback()
+			return errors.New("interval must be greater than 0 for this strategy")
+		}
+		habitRepeating := models.HabitRepeating{
+			HabitID:  habit.ID,
+			Interval: numberofDays,
+		}
+
+		if err := tx.Create(&habitRepeating).Error; err != nil {
+			tx.Rollback()
+			log.Printf("error creating habit repeating: %v", err)
+			return err
+		}
+	}
+
+	if strategy.Frequency == models.FrequencyDaily {
+		// no additional fields to set
+	}
+
 	tx.Commit()
+	return nil
+}
+
+func CreateHabitEntry(userID, habitID uint, date time.Time, completed bool, count uint) error {
 	return nil
 }
