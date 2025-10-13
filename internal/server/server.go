@@ -19,6 +19,7 @@ func Run(r *gin.Engine, addr string) {
 	}
 
 	go func() {
+		log.Println("Starting server on", addr)
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("listen: %s\n", err)
 		}
